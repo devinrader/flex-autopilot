@@ -1,0 +1,13 @@
+[
+  {
+    "name": "KickflipHandoffPlugin",
+    "version": "0.0.0",
+    "class": "KickflipHandoffPlugin",
+    "requires": [
+      {
+        "@twilio/flex-ui": "^0.13.0"
+      }
+    ],
+    "src": "http://127.0.0.1:8085"
+  }
+]

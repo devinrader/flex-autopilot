@@ -4,7 +4,12 @@ const taskListStyles = {
   padding: '10px',
   margin: '0px',
   color: '#fff',
-  background: '#000'
+  background: '#000',
+  display: 'flex',
+  'flex-direction': 'column',
+  flex: '1 0 auto',
+  'border-style': 'solid',
+  'border-width': '0 0 0 0px',
 };
 
 const KickFlipReservationComponent = ({ tasks, selectedTaskSid }) => {
@@ -23,14 +28,27 @@ const KickFlipReservationComponent = ({ tasks, selectedTaskSid }) => {
 
     if (task) {
         let taskAttributes = task.reservation.task.attributes;
-        let firstName = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[0].answer;
-        let reservationDate = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[1].answer;
-        let reservationTime = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[2].answer;
-        let partySize = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[3].answer;
+
+        let firstName='', reservationDate='', reservationTime='', partySize='', taskName='';
+
+        if (taskAttributes.autopilot && taskAttributes.autopilot.memory) {
+            
+            //firstName = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[0].answer;            
+            //reservationDate = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[1].answer;
+            //reservationTime = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[2].answer;
+            //partySize = taskAttributes.autopilot.memory['twilio.collected_data'][0].answers[3].answer;
+            //taskName = taskAttributes.autopilot.memory['twilio.collected_data'][0].name;
+
+            firstName = taskAttributes.autopilot.memory.twilio.collected_data.make_reservation.answers.first_name.answer;
+            reservationDate = taskAttributes.autopilot.memory.twilio.collected_data.make_reservation.answers.reservation_date.answer;
+            reservationTime = taskAttributes.autopilot.memory.twilio.collected_data.make_reservation.answers.reservation_time.answer;
+            partySize = taskAttributes.autopilot.memory.twilio.collected_data.make_reservation.answers.party_size.answer;
+            //taskName = taskAttributes.autopilot.memory.twilio.collected_data.make_reservation.name;
+        }
 
         return <div style={taskListStyles}>
             <h1>CURRENT TASK</h1>
-            <p>{taskAttributes.title}</p>
+            <p>{taskAttributes.type} call to {taskName}</p>
             <h1>DATA COLLECTED</h1>
             <h2>FIRST NAME</h2>
             <p>{firstName}</p>
@@ -39,8 +57,9 @@ const KickFlipReservationComponent = ({ tasks, selectedTaskSid }) => {
             <h2>RESERVATION TIME</h2>
             <p>{reservationTime}</p>
             <h2>PARTY SIZE</h2>
-            <p>{partySize}</p>
+            <p style={{color:'red'}}>{partySize}</p>
         </div>;
+
     } else {
         return <div style={taskListStyles}>
             <h1>No tasks selected</h1>
